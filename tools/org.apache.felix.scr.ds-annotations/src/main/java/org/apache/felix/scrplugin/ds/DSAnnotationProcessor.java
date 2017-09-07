@@ -236,7 +236,14 @@ public class DSAnnotationProcessor implements AnnotationProcessor {
                         ComponentConfigurationPolicy.OPTIONAL.name())));
 
         // configuration pid
-        component.setConfigurationPid(cad.getStringValue("configurationPid", null));
+	Object configPid = cad.getValue("configurationPid");
+        if ( configPid instanceof String ) {
+                component.setConfigurationPid((String)configPid);
+        } else if ( configPid instanceof String[] && ((String[])configPid).length == 1 ) {
+                component.setConfigurationPid(((String[])configPid)[0]);
+        } else {
+                component.setConfigurationPid(null);
+        }
         component.setCreatePid(false);
 
         // no inheritance
